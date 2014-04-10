@@ -20,14 +20,14 @@ Running the python scripts in a Windows system requires installing additional ap
 For running on Windows the following dependencies include options for compiling from source or downloading precomiled versions to install.
 
 #### System Dependencies
-- curl, http://curl.haxx.se/
-- unzip, http://gnuwin32.sourceforge.net/packages/unzip.htm
-- gawk, http://gnuwin32.sourceforge.net/packages/gawk.htm
-- python 2.7, http://www.python.org
+- [curl](http://curl.haxx.se/)
+- [unzip](http://gnuwin32.sourceforge.net/packages/unzip.htm)
+- [gawk](http://gnuwin32.sourceforge.net/packages/gawk.htm)
+- [python 2.7](http://www.python.org)
 
 
 #### Python Dependencies
-- pip, http://www.pip-installer.org
+- [pip](http://www.pip-installer.org)
 - csvkit
 
 ### Installation
@@ -37,7 +37,7 @@ Install python 2.7
 Set system path for python, added using powershell:
 [Environment]::SetEnvironmentVariable("Path", "$env:Path;C:\Python27\;C:\Python27\Scripts\", "User")
 
-Install PIP by downloading get-pip.py from http://www.pip-installer.org/en/latest/installing.html and running from the command prompt "python get-pip.py". 
+Install PIP by downloading [get-pip.py](http://www.pip-installer.org/en/latest/installing.html) and running from the command prompt "python get-pip.py". 
 Sample run file from python folder:
 - Open Command Prompt
 - cd\python27
