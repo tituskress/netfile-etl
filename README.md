@@ -1,83 +1,59 @@
-# Netfile ETL
+# Netfile ETL on Windows
 
-A simple ETL system to process .zip files from the [Netfile](https://www.netfile.com/) campaign finance filing system into individual CSVs per form.
+Replicate the ETL process from Dave Guarino on a Windows environment. Process .zip files from the [Netfile](https://www.netfile.com/) campaign finance filing system into individual CSVs per form.
 
 ## What It Does
 
-This is a simple set of Python scripts which does a few things:
+Python script to perform the following:
 
-1. Downloads and unzips the .zip files containing the campaign finance data from the folder Netfile set up for Oakland ([download_and_unzip_files.py](download_and_unzip_files.py))
+1. Downloads and unzips the .zip files
 
-2. Extracts the individual sheets from each Excel workbook as standalone CSVs ([etl.py](etl.py))
+2. Extracts the individual sheets from each Excel workbook as standalone CSVs
 
-3. Combines the sheets for each "form" (for example, "A-Contributions") across all years, yielding a single CSV with all years' data for each individual form ([merge_csvs_across_years.py](merge_csvs_across_years.py))
+3. Combines the sheets for each "form" (for example, "A-Contributions") across all years, yielding a single CSV with all years' data for each individual form.
 
-These scripts replicate a similar process used by the San Francisco Ethics Commission to consolidate the campaign finance data and get it into a shape where it can be loaded onto its open data portal.
-
-## Notes on Reuse
-
-These scripts can pretty easily be modified for your own use. You will need to do a few things:
-
-1. Ask Netfile to set up a public web directory with the raw .zip files usually served via their form.
-2. In [download_and_unzip_files.py](download_and_unzip_files.py), edit `remote_path` to reflect your own directory URL from Netfile.
-3. Edit that same file, changing the 2011 in `years_with_data` if you want to start from a year other than 2011.
 
 ## Getting Started
-
-This is a set of Unix shell scripts intended to run on a \*nixy system like Linux or Mac OSX. It has been tested and works on both OSX 10.7 and Ubuntu 13.02.
+Running the python scripts in a Windows system requires installing additional applications. 64 bit versions were installed when available on the current server , example: curl, python.
 
 ### Installing Dependencies
+For running on Windows the following dependencies include options for compiling from source or downloading precomiled versions to install.
 
 #### System Dependencies
+- curl, http://curl.haxx.se/
+- unzip, http://gnuwin32.sourceforge.net/packages/unzip.htm
+- gawk, http://gnuwin32.sourceforge.net/packages/gawk.htm
+- python 2.7, http://www.python.org
 
-There are two system dependencies: `curl` and `unzip`.
-
-Use your local package management system to install these. For example, on Ubuntu, do this by running:
-
-```
-apt-get install curl
-apt-get install unzip
-```
-
-(On OSX using Homebrew is recommended.)
 
 #### Python Dependencies
+- pip, http://www.pip-installer.org
+- csvkit
 
-These are Python scripts and so require that language to be installed (it has been tested with 2.7.)
+### Installation
+Install curl, unzip, and gawk from precompiled installers avaiable online.
 
-Additionally, you will need to install `csvkit`. The easiest way to do this is using the `pip` Python package management software.
+Install python 2.7
+Set system path for python, added using powershell:
+[Environment]::SetEnvironmentVariable("Path", "$env:Path;C:\Python27\;C:\Python27\Scripts\", "User")
 
-On a fresh Ubuntu system, you can do this by running:
+Install PIP by downloading get-pip.py from http://www.pip-installer.org/en/latest/installing.html and running from the command prompt "python get-pip.py". 
+Sample run file from python folder:
+- Open Command Prompt
+- cd\python27
+- python get-pip.py
 
-```
-apt-get install python-pip
-pip install csvkit
-```
+Install csvkit using PIP
+- Open Command Prompt
+- pip install csvkit
+
+Note: initial install for csvkit returned error:
+Could not find a version that satisfies the requirement argparse==1.2.1 (from -r requirements.txt (line 4)) (from versions: 0.1.0, 0.2.0, 0.3.0, 0.4.0, 0.5.0, 0.6.0, 0.7.0, 0.8.0, 0.9.0, 0.9.1, 1.0.1, 1.0, 1.1)
+Some externally hosted files were ignored (use --allow-external to allow).
+
+Clear error by installing latest version:
+pip install argparse --allow-external argparse --upgrade
 
 ### Running
 
-You can run the scripts by running the `run_all.sh` script.
-
-### Cron Note
-
-When running as a cron job, we encountered an issue of cron being unable to find the `in2csv` program. We fixed this by modifying that part of the script, changing "in2csv" on line 15 to the full path of where it was installed, such as "/opt/local/in2csv". (You can find the full path by running `which in2csv`.)
-
-### Running on Windows with Vagrant
-
-You can run these scripts on a Windows computer by using the excellent Vagrant virtual machine stack. For instructions, [click here](https://github.com/daguar/netfile-etl/issues/2).
-
-## Oakland's Setup
-
-The current (alpha) setup in Oakland is:1
-
-1. The scripts are run nightly via a cron job on an Ubuntu virtual machine, running on a city staffer's Windows desktop using the wonderful Vagrant (see above)
-2. The scripts dump the data to a folder shared with the Windows host machine (via the `/vagrant` folder in the virtual machine)
-3. We use [Socrata DataSync](http://support.socrata.com/entries/24241271-Setting-up-a-basic-DataSync-job) to upload the CSVs from that local folder to the Socrata open data portal
-4. Windows Task Scheduler is used (see [tutorial here](http://support.socrata.com/entries/24234461-Scheduling-a-DataSync-job-using-Windows-Task-Scheduler)) to automatically re-upload new files every day
-
-## Copyright & License
-
-Copyright Dave Guarino, 2014
-BSD License
-
-This code was written by Dave (OpenOakland) in partnership with the City of Oakland, CA's Public Ethics Commission. Thanks go to the PEC's Lauren Angius for being willing to try an open source approach to this problem.
+Task Sceduler is used to run the script on a scheule.
